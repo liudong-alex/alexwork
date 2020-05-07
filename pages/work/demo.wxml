@@ -4,6 +4,7 @@
 </view>
 <view class="container log-list">
     <text class="log-item">选项A</text>
+    <image src="../img/A.png"></image>
     <radio-group bindchange="radioChange" style="display:flex;" wx:for="{{itemA}}">
 					<radio id="{{item.value}}" value="{{item.value}}"></radio>
 		</radio-group>
