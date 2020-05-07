@@ -2,3 +2,15 @@
 <view class="container log-list">
     <text class="log-item">{{msg}}</text>
 </view>
+<view class="container log-list">
+    <text class="log-item">选项A</text>
+    <radio-group bindchange="radioChange" style="display:flex;" wx:for="{{itemA}}">
+					<radio id="{{item.value}}" value="{{item.value}}"></radio>
+		</radio-group>
+</view>
+<view class="container log-list">
+    <text class="log-item">选项B</text>
+    <radio-group bindchange="radioChange" style="display:flex;" wx:for="{{itemB}}">
+					<radio id="{{item.value}}" color="#2ea7e0" value="{{item.value}}"></radio>
+		</radio-group>
+</view>
