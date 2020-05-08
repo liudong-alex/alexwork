@@ -1,0 +1,7 @@
+<!--demo.wxml-->
+<view class="container log-list">
+    <text class="log-item">{{countItem}}</text>
+</view>
+<view class="container log-list">
+    <button bindtap="backIndex">返回主页</button>
+</view>
