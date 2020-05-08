@@ -11,7 +11,7 @@ Page({
   },
   onLoad: function () {
     // 页面渲染后 执行
-    this.setData({ msg: "投票" });
+    this.setData({ msg: "投票" }); 
   },
   // radio事件
  radioChange: function (e) {
