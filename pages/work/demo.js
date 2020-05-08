@@ -46,13 +46,13 @@ Page({
         if (res.confirm) {
           //这里是点击了确定以后
           console.log('用户点击确定');
-          wx.navigateTo({
+          wx.redirectTo({
             url: '../work/demo1'
           });
         } else {
           //这里是点击了取消以后
           console.log('用户点击取消');
-          wx.navigateTo({
+          wx.redirectTo({
             url: '../index/index'
           });
         }

@@ -10,7 +10,7 @@ Page({
   },
   backIndex: function() {
     //跳转页面
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../index/index'
     })
   },

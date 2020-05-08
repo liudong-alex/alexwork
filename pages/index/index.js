@@ -54,7 +54,7 @@ Page({
   clickMe: function() {
     // this.setData({ motto: "Hello Worldaaaa" })
     //跳转页面
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../work/demo'
     })
   }
