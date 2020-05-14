@@ -69,6 +69,7 @@ Page({
 
   // 上传图片
   doUpload: function () {
+    var $this = this;
     // 选择图片
     wx.chooseImage({
       count: 1,
@@ -80,10 +81,11 @@ Page({
           title: '上传中',
         })
 
-        const filePath = res.tempFilePaths[0]
-        
+        const filePath = res.tempFilePaths[0];
+        var util = require('../../utils/commonutil.js');
+        var id = util.wxuuid();
         // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
+        const cloudPath = id + filePath.match(/\.[^.]+?$/)[0]
         wx.cloud.uploadFile({
           cloudPath,
           filePath,
@@ -93,10 +95,7 @@ Page({
             app.globalData.fileID = res.fileID
             app.globalData.cloudPath = cloudPath
             app.globalData.imagePath = filePath
-            
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
+            $this.saveShowPro(res);
           },
           fail: e => {
             console.error('[上传文件] 失败：', e)
@@ -117,4 +116,70 @@ Page({
     })
   },
 
+  //保存图片并生成作品对象
+  saveShowPro: function(saveData) {
+    var $this = this;
+    //1.获取到数据库
+    let db = wx.cloud.database({
+      env: 'alex-liu-demo-vgm6j'
+    });
+    db.collection('show_pro_index').get().then(res => {
+      if (res.data.length > 0) {
+        var index = res.data[0].index + 1;
+        //处理作品对象
+        var showProObj = {
+          'proindex' : index,
+          'url' : saveData.fileID,
+          'name' : index + '号作品',
+          'count' : 0
+        };
+        db.collection('show_pro_index').doc(res.data[0]._id).update({
+          data: {
+            index : index
+          },
+          success: function(res) {
+            console.log(res.data);
+          }
+        });
+        $this.saveData(showProObj);
+      } else {
+        db.collection('show_pro_index').add({
+          // data 字段表示需新增的 JSON 数据
+          data: {
+            index: 1
+          },
+          success: function(res) {
+            //处理作品对象
+            var showProObj = {
+              'proindex' : 1,
+              'url' : saveData.fileID,
+              'name' : '1号作品',
+              'count' : 0
+            };
+            $this.saveData(showProObj);
+          }
+        });
+      }
+    });
+  },
+  saveData : function (saveData) {
+     //1.获取到数据库
+    let db = wx.cloud.database({
+      env: 'alex-liu-demo-vgm6j'
+    });
+    let showProColl = db.collection('show_pro');
+    //3.调动接口上传数据
+    showProColl.add({
+      //要添加的数据
+      data:saveData,
+      success(res){
+          wx.navigateTo({
+            url: '../storageConsole/storageConsole'
+          });
+      },
+      fail(err){
+          console.log('数据添加失败',err);
+      }
+    });
+  },
 })

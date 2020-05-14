@@ -117,7 +117,10 @@ addData:function(data, flg) {
       mycollection.doc(data.data[0]._id).update({
         data: saveData
       }).then(res=>{
-          console.log(res)
+          console.log(res);
+          wx.redirectTo({
+            url: '../dest/toupiaoresult'
+          });
       });
     }
   },
