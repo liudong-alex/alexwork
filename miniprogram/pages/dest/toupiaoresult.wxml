@@ -1,10 +1,11 @@
 <!--demo.wxml-->
 <view class="">
-    <image class='background' src="cloud://alex-liu-demo-vgm6j.616c-alex-liu-demo-vgm6j-1302120409/my-image.jpg" mode="aspectFill"></image>
-    <view class="container log-list">
-        <text class="log-item">{{countItem}}</text>
+    <!-- <image class='background' src="cloud://alex-liu-demo-vgm6j.616c-alex-liu-demo-vgm6j-1302120409/my-image.jpg" mode="aspectFill"></image> -->
+    <view class='container log-list' wx:for="{{resultPros}}" wx:key="index" wx:for-item="resultPro">
+        <text class="log-item">{{resultPro.name+'：'+resultPro.count+'票'}}</text>
     </view>
-    <view style="display: flex; flex-direction: column; padding: 40rpx; margin-top: 800rpx;">
+
+    <view style="display: flex; flex-direction: column; padding: 40rpx;">
         <button bindtap="backIndex">返回主页</button>
     </view>
 </view>

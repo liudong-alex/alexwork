@@ -15,114 +15,62 @@ Page({
     // 页面渲染后 执行
     this.setData({ msg: "为喜爱的作品投票" });
     var $this = this;
-    let db = wx.cloud.database({
-       env: 'alex-liu-demo-vgm6j'
-    });
-    let mycol = db.collection('img-pro');
-    mycol.get({
-       success(res){
-           console.log("获取数据",res);
-           $this.setData({ urlA: res.data[0].url });
-           $this.setData({ urlB: res.data[1].url });
-       },
-       fail(err){
-           console.log(err)
-       }
+    var util = require('../../utils/commonutil.js');
+    var db = util.getDB();
+    db.collection('show_pro').get().then(res => {
+           console.log("作品表所有数据",res);
+           if (res.data.length > 0) {
+            this.setData({
+              showPros : res.data
+            });
+           } else {
+            this.setData({
+              noDataViewHidden : true,
+              noData : '暂无参赛作品'
+            });
+           }
     });
   },
   // radio事件
  radioChange: function (e) {
-    var msg = '';
-    if(e.detail.value== 'A'){
-      this.setData({
-        msg:'给A投票+1'
-      });
-      msg = '给A投票+1';
-      this.data.countA = this.data.countA + 1;
-    }else{
-      this.setData({
-        msg:'给B投票+1'
-      });
-      msg = '给B投票+1';
-      this.data.countB = this.data.countB + 1;
-    };
     var $this = this;
+    var value = e.detail.value;
     wx.showModal({
       title: '提示',
-      content: msg,
+      content: '投票成功',
       success: function (res) {
         if (res.confirm) {
-          //这里是点击了确定以后
-          // console.log('用户点击确定');
-          $this.setCount(e.detail.value);
+          $this.setCount(value);
         } else {
-          //这里是点击了取消以后
-          // console.log('用户点击取消');
           wx.redirectTo({
             url: '../index/index'
           });
         }
       }
     });
-},
-setCount:function(e) {
-  var $this = this;
-  //1.获取到数据库
-  let db = wx.cloud.database({
-    env: 'alex-liu-demo-vgm6j'
-  });
-  let mycol = db.collection('toupiao');
-  mycol.get({
-    success(res){
-        console.log("获取数据",res);
-        $this.addData(res, e);
-    },
-    fail(err){
-        console.log(err);
-    }
- });
-},
-addData:function(data, flg) {
-  var $this = this;
-  let db = wx.cloud.database({
-    env: 'alex-liu-demo-vgm6j'
-  });
-  //2.链接数据库中的集合(表)
-  let mycollection = db.collection('toupiao');
-
-  var saveData = {};
-  if (!data.data || data.data.length == 0) {
-    saveData = {'countA':$this.data.countA,'countB':$this.data.countB};
-    //3.调动接口上传数据
-    mycollection.add({
-      //要添加的数据
-      data:saveData,
-      success(res){
-          console.log('数据添加成功',res);
-          wx.redirectTo({
-            url: '../dest/toupiaoresult'
-          });
+ },
+ setCount:function(value) {
+    var $this = this;
+    var strArray = value.split('_');
+    var _id = strArray[0];
+    var count = strArray[1];
+    //1.获取到数据库
+    var util = require('../../utils/commonutil.js');
+    var db = util.getDB();
+    db.collection('show_pro').doc(_id).update({
+      data: {
+        count : Number(count) + 1
       },
-      fail(err){
-          console.log('上传失败',err);
+      success: function(res) {
+        console.log(res.data);
+        wx.redirectTo({
+          url: '../dest/toupiaoresult'
+        });
+      },
+      fail: function(err) {
+        console.error('[数据库] [更新记录] 失败：', err);
       }
     });
-  } else {
-      if ('A' == flg) {
-        saveData = {countA:data.data[0].countA + 1};
-      } else {
-        saveData = {countB:data.data[0].countB + 1};
-      }
-      //先查询再修改
-      mycollection.doc(data.data[0]._id).update({
-        data: saveData
-      }).then(res=>{
-          console.log(res);
-          wx.redirectTo({
-            url: '../dest/toupiaoresult'
-          });
-      });
-    }
-  },
+ },
   
 })

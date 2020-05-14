@@ -2,17 +2,12 @@
 <view class="container log-list">
     <text class="log-item">{{msg}}</text>
 </view>
-<view class="container log-list">
-    <text class="log-item">选项A</text>
-    <image src="{{urlA}}"></image>
-    <radio-group bindchange="radioChange" style="display:flex;" wx:for="{{itemA}}" wx:key="item">
-		<radio id="{{item.value}}" value="{{item.value}}" class="btn-radio">给{{item.text}}投票</radio>
-	</radio-group>
-</view>
-<view class="container log-list">
-    <text class="log-item">选项B</text>
-    <image src="{{urlB}}"></image>
-    <radio-group bindchange="radioChange" style="display:flex;" wx:for="{{itemB}}" wx:key="item">
-		<radio id="{{item.value}}" color="#2ea7e0" value="{{item.value}}" class="btn-radio">给{{item.text}}投票</radio>
-	</radio-group>
+
+<view class='noDataView' hidden='{{noDataViewHidden}}'>{{noData}}</view>
+<view class='container log-list' wx:for="{{showPros}}" wx:key="index" wx:for-item="showPro">
+    <view class='log-item'>索引{{showPro.proindex}}：{{showPro.name}}</view>
+    <image src="{{showPro.url}}"></image>
+    <radio-group bindchange="radioChange" style="display:flex;">
+		    <radio color="#2ea7e0" value="{{showPro._id +'_'+ showPro.count}}" class="btn-radio">给{{showPro.name}}投票</radio>
+	  </radio-group>
 </view>

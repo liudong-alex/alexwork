@@ -12,8 +12,18 @@ const wxuuid = function () {
   s[8] = s[13] = s[18] = s[23] = "-";
   var uuid = s.join("").replace("-","");
   return uuid;
+};
+/**
+ * 获取数据库对象
+ */
+const getDB = function () {
+  let db = wx.cloud.database({
+    env: 'alex-liu-demo-vgm6j'
+  });
+  return db;
 }
 //一定要在这里面注册，否则没有用
 module.exports = {
-  wxuuid: wxuuid
+  wxuuid: wxuuid,
+  getDB : getDB,
 }
