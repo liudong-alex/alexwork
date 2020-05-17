@@ -25,6 +25,7 @@ Page({
     var $this = this;
     var util = require('../../../utils/commonutil.js');
     var db = util.getDB();
+    $this.setData({prienFlag:true,printFlag:true});
   },
   // 选择图片
   selectImg: function () {
@@ -36,7 +37,7 @@ Page({
       // sourceType: ['album', 'camera'],
       success: function (res) {
         const ctx = wx.createCanvasContext('backgroungImg');
-        // ctx.setGlobalAlpha(0.4)
+        ctx.setGlobalAlpha(1)
         var src = res.tempFilePaths[0];
         _this.data.img = src;
         //获取当前屏幕宽度
@@ -62,8 +63,8 @@ Page({
                   cutH:cutH,
                   prienFlag:true,
                   alreay:true,
-                  // imgW:res.width,
-                  // imgH:res.height
+                  imgW:res.width,
+                  imgH:res.height
               });
             }
         });
@@ -89,30 +90,28 @@ Page({
     that.data.cutX = x;
     that.data.cutY = y;
     const ctx = wx.createCanvasContext('merageImg');
-    ctx.setGlobalAlpha(0.4)
-    ctx.drawImage(that.data.cutSrc, x, y, 50, 50)
+    ctx.setGlobalAlpha(1)
+    ctx.drawImage(that.data.cutSrc, x, y, that.data.cutCanvasW, that.data.cutCanvasY)
     ctx.setFillStyle('red')
-    ctx.fillRect(x, y, 50, 50)
+    ctx.fillRect(x, y, that.data.cutCanvasW, that.data.cutCanvasY)
     ctx.draw()
   },
    //打开裁剪页面
    openPictureHandle:function(){
-      wx.navigateTo({url: 'picturehandle'});
+      wx.navigateTo({url: 'pictureindex'});
    },
    //确认
    okBtn : function() {
-       var that = this;
-       that.setData({prienFlag:false});
-       that.setData({printFlag:true});
-       const ctx = wx.createCanvasContext('resultImg', that);
-       var phoneW = Number(wx.getSystemInfoSync().windowWidth*90)/100;
-       var w = phoneW;
-       var h = (phoneW/Number(that.data.imgW))*Number(that.data.imgH);
-       ctx.drawImage(that.data.img, 0, 0, w, h);
-       ctx.drawImage(that.data.cutSrc, that.data.cutX, that.data.cutY, 50, 50);
-       ctx.draw(false,
-        
-      );
+      var that = this;
+      that.setData({prienFlag:false});
+      that.setData({printFlag:true});
+      const ctx = wx.createCanvasContext('resultImg', that);
+      var phoneW = Number(wx.getSystemInfoSync().windowWidth*90)/100;
+      var w = phoneW;
+      var h = (phoneW/Number(that.data.imgW))*Number(that.data.imgH);
+      ctx.drawImage(that.data.img, 0, 0, w, h);
+      ctx.drawImage(that.data.cutSrc, that.data.cutX, that.data.cutY, that.data.cutCanvasW, that.data.cutCanvasY);
+      ctx.draw();
       wx.showLoading({
         title: '正在保存',
         mask: true
@@ -177,23 +176,23 @@ Page({
       },1500);
    },
    //处理返回的裁剪图片
-   cutImgHandle : function(url) {
+   cutImgHandle : function(data) {
+      var url = data.src;
       var $this = this;
       $this.data.cutSrc = url;
-      var phoneW = Number(wx.getSystemInfoSync().windowWidth*90)/100;
       wx.getImageInfo({
         src: url,
         success: function (res) {
-          var w = phoneW;
-          var h = (phoneW/Number(res.width))*Number(res.height)
+          var w = data.cutW;
+          var h = data.cutH;
           const ctx = wx.createCanvasContext('merageImg');
-          ctx.setGlobalAlpha(0.4)
-          ctx.drawImage(url, 0, 0, 50, 50)
-          ctx.setFillStyle('red')
-          ctx.fillRect(0, 0, 50, 50)
+          ctx.setGlobalAlpha(1)
+          ctx.drawImage(url, 0, 0, w, h);
+          // ctx.setFillStyle('red')
+          // ctx.fillRect(0, 0, 50, 50)
           ctx.draw();
-          $this.data.cutCanvasW = 50;
-          $this.data.canvasH = 50;
+          $this.data.cutCanvasW = w;
+          $this.data.cutCanvasH = h;
         }
       });
    },

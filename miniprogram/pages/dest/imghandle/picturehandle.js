@@ -115,6 +115,8 @@ Page({
     ctx.setFillStyle('red')
     ctx.fillRect(x, y, nowCutW, nowCutH)
     ctx.draw()
+    that.data.nowCutW = nowCutW;
+    that.data.nowCutH = nowCutH;
   },
   //等屏裁剪
   etcType:function(){
@@ -149,7 +151,8 @@ Page({
     ctx.setGlobalAlpha(0.4)
     ctx.drawImage(that.data.img, 0, 0, canvasW, canvasH)
     ctx.setFillStyle('red')
-    ctx.fillRect(0,0, nowCutW, nowCutH)
+    ctx.fillRect(0,0, nowCutW, nowCutH);
+    // ctx.restore();
     ctx.draw()
     that.setData({
      nowCutW:nowCutW,
@@ -204,7 +207,12 @@ Page({
       var pages = getCurrentPages();
       var currPage = pages[pages.length - 1];   //当前页面
       var prevPage = pages[pages.length - 2];  //上一个页面
-      prevPage.cutImgHandle($this.data.resultImg);
+      var data = {
+        src:$this.data.resultImg,
+        cutH:$this.data.nowCutH,
+        cutW:$this.data.nowCutW,
+      };
+      prevPage.cutImgHandle(data);
       wx.navigateBack({
         delta: 1  // 返回上一级页面。
       })
