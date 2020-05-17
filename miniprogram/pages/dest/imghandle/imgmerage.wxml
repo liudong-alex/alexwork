@@ -1,0 +1,16 @@
+<view class="index_all_box">
+    <view class="imgCut_header">
+        <view class="imgCut_header_l" bindtap='openPictureHandle'>选择合成图</view>
+        <view class="imgCut_header_m" bindtap='selectImg'>点击上传图片</view>
+        <view class="imgCut_header_r" bindtap='okBtn'>确认合成</view>
+    </view>
+    <view class="allCavans" wx:if='{{prienFlag}}' style='width: {{canvasW}}px;height: {{canvasH}}px' >
+      <canvas class='canvasSty' style='width: {{canvasW}}px;height: {{canvasH}}px' canvas-id='backgroungImg' disable-scroll='true' bindtouchmove=''></canvas>
+      <!-- <view class="allCavans_inbg" style='width: {{canvasW}}px;height:{{canvasH}}px; background: url({{img}});background-size: 100% 100%;z-index:999;'></view> -->
+      <canvas class='canvasSty' style='width: {{cutCanvasW}}px;height: {{cutCanvasH}}px;z-index:9999;' canvas-id='merageImg' disable-scroll='true' bindtouchmove='canvasMove'></canvas>
+    </view>
+    <view class="allCavans" wx:if='{{printFlag}}'>
+        <canvas class='canvasSty' style='width: {{canvasW}}px;height: {{canvasH}}px;' canvas-id='resultImg'/>
+    </view>
+    <image src="{{rimgsrc}}"></image>
+</view>

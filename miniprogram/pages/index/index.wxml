@@ -69,5 +69,12 @@
     </navigator>
   </view>
 
+  <!-- 处理图片 -->
+  <view class="uploader">
+    <navigator url="../dest/imghandle/imgmerage" open-type="navigate" class="uploader-text">
+      <text>图片合成</text>
+    </navigator>
+  </view>
+
 
 </view>
