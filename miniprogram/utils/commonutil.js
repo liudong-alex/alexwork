@@ -14,6 +14,33 @@ const wxuuid = function () {
   return uuid;
 };
 /**
+ * 存缓存
+ */
+const setCache = function (key, value) {
+  try {
+    wx.setStorageSync(key, value);
+  } catch (e) {
+    console.error('写入缓存失败');
+    console.error(e);
+  }
+  return;
+}
+/**
+ * 读缓存
+ */
+const getCache = function (key) {
+  try {
+    var value = wx.getStorageSync(key);
+    if (value) {
+      return value;
+    }
+  } catch (e) {
+    console.error('读取缓存失败');
+    console.error(e);
+    return null;
+  }
+}
+/**
  * 获取数据库对象
  */
 const getDB = function () {
@@ -26,4 +53,6 @@ const getDB = function () {
 module.exports = {
   wxuuid: wxuuid,
   getDB : getDB,
+  setCache : setCache,
+  getCache : getCache,
 }

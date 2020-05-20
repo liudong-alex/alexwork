@@ -7,7 +7,11 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    auth:'',
+  },
+  common:{
+    util:require('../../utils/commonutil.js'),
   },
 
   onLoad: function() {
@@ -17,7 +21,8 @@ Page({
       })
       return
     }
-
+    var _this = this;
+    var util = require('../../utils/commonutil.js');
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -25,9 +30,27 @@ Page({
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
+              var userInfo = res.userInfo;
               this.setData({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
+              });
+              var db = util.getDB();
+              db.collection('auth_user').where({
+                user_name: res.userInfo.nickName
+              }).get({
+                success: function(res) {
+                  // res.data 是包含以上定义的两条记录的数组
+                  console.log(res.data);
+                  if (res.data && res.data.length > 0) {
+                    _this.data.auth = res.data[0].auth;
+                    _this.setData({
+                      auth: _this.data.auth
+                    });
+                    userInfo.auth = _this.data.auth;
+                    util.setCache('userInfo', userInfo);
+                  }
+                }
               })
             }
           })
@@ -38,10 +61,30 @@ Page({
 
   onGetUserInfo: function(e) {
     if (!this.data.logged && e.detail.userInfo) {
+      var _this = this;
+      var util = require('../../utils/commonutil.js');
+      var userInfo = e.detail.userInfo;
       this.setData({
         logged: true,
         avatarUrl: e.detail.userInfo.avatarUrl,
         userInfo: e.detail.userInfo
+      })
+      var db = util.getDB();
+      db.collection('auth_user').where({
+        user_name: userInfo.nickName
+      }).get({
+        success: function(res) {
+          // res.data 是包含以上定义的两条记录的数组
+          console.log(res.data);
+          if (res.data && res.data.length > 0) {
+            _this.data.auth = res.data[0].auth;
+            _this.setData({
+              auth: _this.data.auth
+            });
+            userInfo.auth = _this.data.auth;
+            util.setCache('userInfo', userInfo);
+          }
+        }
       })
     }
   },

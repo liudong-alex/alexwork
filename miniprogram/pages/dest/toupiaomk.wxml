@@ -1,0 +1,14 @@
+<view class="container log-list">
+    <text class="log-item">{{msg}}</text>
+</view>
+<view class='container log-list' hidden='{{noDataViewHidden}}'>{{noData}}</view>
+<view class='container log-list' wx:for="{{toupiaoList}}" wx:key="index" wx:for-item="toupiaoDto" data-index="{{index}}">
+    <view class='log-item'>已存主题{{index}}:{{toupiaoDto.title}}
+        <input wx:if="{{showInput}}" class="input" bindinput="inputHandle" data-index="{{index}}" value="{{toupiaoDto.title}}"></input>
+        <button wx:if="{{nobtnViewHidden}}" bindtap="saveHandle" data-index="{{index}}">保存</button>
+        <button wx:if="{{showCK}}" bindtap="tabHandle" data-index="{{index}}">查看</button>
+    </view>
+</view>
+<view class="container log-list">
+    <button wx:if="{{auth === 'admin'}}" class="log-item" bindtap="addToupiaoMoudle">添加投票主题</button>
+</view>

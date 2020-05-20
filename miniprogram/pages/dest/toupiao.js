@@ -11,21 +11,23 @@ Page({
     countA:0,
     countB:0
   },
-  onLoad: function () {
+  onLoad: function (options) {
     // 页面渲染后 执行
     this.setData({ msg: "为喜爱的作品投票" });
     var $this = this;
     var util = require('../../utils/commonutil.js');
     var db = util.getDB();
-    db.collection('show_pro').get().then(res => {
+    db.collection('show_pro').where({
+      toupiao_list_id: options.toupiao_list_id
+    }).get().then(res => {
            console.log("作品表所有数据",res);
            if (res.data.length > 0) {
-            this.setData({
+            $this.setData({
               showPros : res.data
             });
            } else {
-            this.setData({
-              noDataViewHidden : true,
+            $this.setData({
+              noDataViewHidden : false,
               noData : '暂无参赛作品'
             });
            }

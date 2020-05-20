@@ -11,13 +11,13 @@
       size="default"
     ></button>
     <view class="userinfo-nickname-wrapper">
-      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+      <button wx:if="{{auth === 'admin'}}" class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
     </view>
   </view>
 
 
   <!-- 上传图片 -->
-  <view class="uploader">
+  <view class="uploader" wx:if="{{auth === 'admin'}}">
     <view class="uploader-text" bindtap="doUpload">
       <text>上传图片</text>
     </view>
@@ -49,28 +49,28 @@
   </view> -->
 
   <!-- 云调用 -->
-  <view class="uploader">
+  <view class="uploader" wx:if="{{auth === 'admin'}}">
     <navigator url="../openapi/openapi" open-type="navigate" class="uploader-text">
       <text>云调用</text>
     </navigator>
   </view>
 
-  <!-- 测试页面 -->
+  <!-- 投票通道 -->
   <view class="uploader">
-    <navigator url="../dest/toupiao" open-type="navigate" class="uploader-text">
-      <text>投票通道</text>
+    <navigator url="../dest/toupiaomk" open-type="navigate" class="uploader-text">
+      <text>投票模块</text>
     </navigator>
   </view>
 
   <!-- 处理图片 -->
-  <view class="uploader">
+  <view class="uploader" wx:if="{{auth === 'admin'}}">
     <navigator url="../dest/imghandle/picturehandle" open-type="navigate" class="uploader-text">
       <text>处理图片</text>
     </navigator>
   </view>
 
   <!-- 处理图片 -->
-  <view class="uploader">
+  <view class="uploader" wx:if="{{auth === 'admin'}}">
     <navigator url="../dest/imghandle/imgmerage" open-type="navigate" class="uploader-text">
       <text>图片合成</text>
     </navigator>

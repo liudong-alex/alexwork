@@ -3,7 +3,7 @@
     <text class="log-item">{{msg}}</text>
 </view>
 
-<view class='noDataView' hidden='{{noDataViewHidden}}'>{{noData}}</view>
+<view class='container log-list' hidden='{{noDataViewHidden}}'>{{noData}}</view>
 <view class='container log-list' wx:for="{{showPros}}" wx:key="index" wx:for-item="showPro">
     <view class='log-item'>索引{{showPro.proindex}}：{{showPro.name}}</view>
     <image src="{{showPro.url}}"></image>
