@@ -83,6 +83,12 @@ Page({
             });
             userInfo.auth = _this.data.auth;
             util.setCache('userInfo', userInfo);
+          }else{
+            _this.setData({
+              auth: 'none'
+            });
+            userInfo.auth = 'none';
+            util.setCache('userInfo', userInfo);
           }
         }
       })
