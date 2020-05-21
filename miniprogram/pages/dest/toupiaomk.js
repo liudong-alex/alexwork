@@ -62,7 +62,7 @@ Page({
     var _this = this;
     var value = e.detail.value;
     _this.data.toupiaoList.push({
-      'title':'请设置主题',
+      // 'title':'请设置主题',
       'state':'none'
     });
     _this.setData({
@@ -116,6 +116,7 @@ Page({
         _this.setData({
           nobtnViewHidden:false,
           toupiaoList: _this.data.toupiaoList,
+          showCK:true
         });
         wx.hideLoading();
       }
@@ -124,9 +125,33 @@ Page({
   tabHandle:function(e) {
     var dataIndex = e.currentTarget.dataset.index;
     var toupiaoModel = this.data.toupiaoList[dataIndex];
-    wx.navigateTo({
-      url:'toupiao?toupiao_list_id=' + toupiaoModel._id
-    })
+    var userInfo = this.common.util.getCache('userInfo');
+    var db = this.common.util.getDB();
+    db.collection('user_show').where({
+      user_open_id: userInfo.open_id
+    }).get().then(res => {
+        if (res.data.length > 0) {
+          wx.showModal({
+            title: '提示',
+            content: '每人仅能投一票',
+            success: function (res) {
+              if (res.confirm) {
+                wx.redirectTo({
+                  url: 'toupiaoresult?toupiao_list_id=' + toupiaoModel._id
+                });
+              } else {
+                wx.redirectTo({
+                  url: '../index/index'
+                });
+              }
+            }
+          });
+        } else {
+          wx.navigateTo({
+            url:'toupiao?toupiao_list_id=' + toupiaoModel._id
+          })
+        }
+    });
   },
   
 })

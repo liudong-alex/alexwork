@@ -35,21 +35,39 @@ Page({
                 avatarUrl: res.userInfo.avatarUrl,
                 userInfo: res.userInfo
               });
-              var db = util.getDB();
-              db.collection('auth_user').where({
-                user_name: res.userInfo.nickName
-              }).get({
-                success: function(res) {
-                  // res.data 是包含以上定义的两条记录的数组
-                  console.log(res.data);
-                  if (res.data && res.data.length > 0) {
-                    _this.data.auth = res.data[0].auth;
-                    _this.setData({
-                      auth: _this.data.auth
-                    });
-                    userInfo.auth = _this.data.auth;
-                    util.setCache('userInfo', userInfo);
-                  }
+              // 调用云函数
+              wx.cloud.callFunction({
+                name: 'login',
+                data: {},
+                success: res => {
+                  app.globalData.openid = res.result.openid;
+                  userInfo.openid = res.result.openid;
+                  var db = util.getDB();
+                  db.collection('auth_user').where({
+                    open_id: userInfo.openid
+                  }).get({
+                    success: function(res) {
+                      // res.data 是包含以上定义的两条记录的数组
+                      console.log(res.data);
+                      if (res.data && res.data.length > 0) {
+                        _this.data.auth = res.data[0].auth;
+                        _this.setData({
+                          auth: _this.data.auth
+                        });
+                        userInfo.auth = _this.data.auth;
+                      }else{
+                        _this.data.auth = 'none'
+                        _this.setData({
+                          auth: 'none'
+                        });
+                        userInfo.auth = 'none';
+                      }
+                      util.setCache('userInfo', userInfo);
+                    }
+                  })
+                },
+                fail: err => {
+                  console.error('[云函数] [login] 调用失败', err);
                 }
               })
             }
@@ -69,29 +87,41 @@ Page({
         avatarUrl: e.detail.userInfo.avatarUrl,
         userInfo: e.detail.userInfo
       })
-      var db = util.getDB();
-      db.collection('auth_user').where({
-        user_name: userInfo.nickName
-      }).get({
-        success: function(res) {
-          // res.data 是包含以上定义的两条记录的数组
-          console.log(res.data);
-          if (res.data && res.data.length > 0) {
-            _this.data.auth = res.data[0].auth;
-            _this.setData({
-              auth: _this.data.auth
-            });
-            userInfo.auth = _this.data.auth;
-            util.setCache('userInfo', userInfo);
-          }else{
-            _this.setData({
-              auth: 'none'
-            });
-            userInfo.auth = 'none';
-            util.setCache('userInfo', userInfo);
-          }
+      // 调用云函数
+      wx.cloud.callFunction({
+        name: 'login',
+        data: {},
+        success: res => {
+          app.globalData.openid = res.result.openid;
+          userInfo.openid = res.result.openid;
+          var db = util.getDB();
+          db.collection('auth_user').where({
+            open_id: userInfo.openid
+          }).get({
+            success: function(res) {
+              // res.data 是包含以上定义的两条记录的数组
+              console.log(res.data);
+              if (res.data && res.data.length > 0) {
+                _this.data.auth = res.data[0].auth;
+                _this.setData({
+                  auth: _this.data.auth
+                });
+                userInfo.auth = _this.data.auth;
+              }else{
+                _this.setData({
+                  auth: 'none'
+                });
+                userInfo.auth = 'none';
+              }
+              util.setCache('userInfo', userInfo);
+            }
+          })
+        },
+        fail: err => {
+          console.error('[云函数] [login] 调用失败', err);
         }
       })
+      
     }
   },
 

@@ -1,0 +1,15 @@
+<view class="">
+    <view wx:for="{{resultUserShow}}" wx:key="index">
+        <view class="userinfo">
+           <button class="userinfo-avatar" style="background-image: url({{item.user_photo_url}})" size="default"></button>
+           <text>{{item.user_name}} ：</text>
+           <view wx:for="{{item.user_show_detil}}" wx:key="index" wx:for-item="newitem">
+               <text>{{newitem.show_name}}</text>
+           </view>
+        </view>
+    </view>
+
+    <view style="display: flex; flex-direction: column; padding: 40rpx;">
+        <button bindtap="backIndex">返回主页</button>
+    </view>
+</view>

@@ -4,8 +4,8 @@
 <view class='container log-list' hidden='{{noDataViewHidden}}'>{{noData}}</view>
 <view class='container log-list' wx:for="{{toupiaoList}}" wx:key="index" wx:for-item="toupiaoDto" data-index="{{index}}">
     <view class='log-item'>已存主题{{index}}:{{toupiaoDto.title}}
-        <input wx:if="{{showInput}}" class="input" bindinput="inputHandle" data-index="{{index}}" value="{{toupiaoDto.title}}"></input>
-        <button wx:if="{{nobtnViewHidden}}" bindtap="saveHandle" data-index="{{index}}">保存</button>
+        <input wx:if="{{showInput && !toupiaoDto._id}}" class="input" placeholder="请输入投票主题" bindinput="inputHandle" data-index="{{index}}" value="{{toupiaoDto.title}}"></input>
+        <button wx:if="{{nobtnViewHidden && !toupiaoDto._id}}" bindtap="saveHandle" data-index="{{index}}">保存</button>
         <button wx:if="{{showCK}}" bindtap="tabHandle" data-index="{{index}}">查看</button>
     </view>
 </view>

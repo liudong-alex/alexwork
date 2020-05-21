@@ -1,5 +1,6 @@
 <!--demo.wxml-->
 <view class="">
+    <button wx:if="{{auth === 'admin'}}" bindtap="tabResult">查看投票详情</button>
     <!-- <image class='background' src="cloud://alex-liu-demo-vgm6j.616c-alex-liu-demo-vgm6j-1302120409/my-image.jpg" mode="aspectFill"></image> -->
     <view class='container log-list' wx:for="{{resultPros}}" wx:key="index" wx:for-item="resultPro">
         <text class="log-item">{{resultPro.name+'：'+resultPro.count+'票'}}</text>

@@ -1,4 +1,7 @@
 /**app.wxss**/
+@import 'style/weui.wxss';
+@import 'style/base/variable/color.wxss';
+
 .container {
   display: flex;
   flex-direction: column;
