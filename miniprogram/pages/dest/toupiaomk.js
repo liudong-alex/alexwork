@@ -128,7 +128,8 @@ Page({
     var userInfo = this.common.util.getCache('userInfo');
     var db = this.common.util.getDB();
     db.collection('user_show').where({
-      user_open_id: userInfo.open_id
+      user_open_id: userInfo.open_id,
+      toupiao_list_id:toupiaoModel._id
     }).get().then(res => {
         if (res.data.length > 0) {
           wx.showModal({
