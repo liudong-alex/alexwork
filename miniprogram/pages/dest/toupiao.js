@@ -92,7 +92,7 @@ Page({
     });
     var data = {
       'toupiao_list_id': _this.data.toupiao_list_id,
-      'user_open_id':userInfo.open_id,
+      'user_open_id':userInfo.openid,
       'user_name':userInfo.nickName,
       'user_photo_url':userInfo.avatarUrl,
       'user_show_detil':[{
