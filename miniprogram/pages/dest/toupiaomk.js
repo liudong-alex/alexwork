@@ -126,6 +126,12 @@ Page({
     var dataIndex = e.currentTarget.dataset.index;
     var toupiaoModel = this.data.toupiaoList[dataIndex];
     var userInfo = this.common.util.getCache('userInfo');
+    if (userInfo.auth && userInfo.auth === 'admin') {
+      wx.navigateTo({
+        url:'toupiao?toupiao_list_id=' + toupiaoModel._id
+      })
+      return;
+    }
     var db = this.common.util.getDB();
     db.collection('user_show').where({
       user_open_id: userInfo.openid,
@@ -137,7 +143,7 @@ Page({
             content: '每人仅能投一票',
             success: function (res) {
               if (res.confirm) {
-                wx.redirectTo({
+                wx.navigateTo({
                   url: 'toupiaoresult?toupiao_list_id=' + toupiaoModel._id
                 });
               } else {

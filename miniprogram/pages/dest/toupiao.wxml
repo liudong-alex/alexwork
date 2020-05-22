@@ -1,12 +1,18 @@
-<!--demo.wxml-->
-<view class="container log-list">
-    <text class="log-item">{{msg}}</text>
+<!-- 上传图片 -->
+<view class="uploader" wx:if="{{auth === 'admin'}}">
+    <view class="uploader-text" bindtap="doUpload">
+        <text>上传参与作品</text>
+    </view>
+    <view class="uploader-container" wx:if="{{imgUrl}}">
+        <image class="uploader-image" src="{{imgUrl}}" mode="aspectFit" bindtap="previewImg"></image>
+    </view>
 </view>
-
 <view class='container log-list' hidden='{{noDataViewHidden}}'>{{noData}}</view>
-<view class='container log-list' wx:for="{{showPros}}" wx:key="index" wx:for-item="showPro">
-    <view class='log-item'>索引{{showPro.proindex}}：{{showPro.name}}</view>
-    <image src="{{showPro.url}}"></image>
+<view class='uploader' wx:for="{{showPros}}" wx:key="index" wx:for-item="showPro">
+    <view class='uploader-text'>{{showPro.name}}
+        <icon wx:if="{{auth === 'admin'}}" type="cancel" class="icons" size="20" bindtap="delHandle" data-index="{{index}}"></icon>
+    </view>
+    <image class="uploader-image" src="{{showPro.url}}"></image>
     <radio-group bindchange="radioChange" style="display:flex;">
 		    <radio color="#2ea7e0" value="{{showPro._id +'_'+ showPro.count}}" class="btn-radio">给{{showPro.name}}投票</radio>
 	  </radio-group>
